@@ -1,16 +1,20 @@
+import os
 import subprocess
 
 
 def execute_command(command):
-    process = subprocess.Popen(
-        command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    )
-    stdout, stderr = process.communicate()
-
-    if process.returncode != 0:
-        print(f"Error occurred: {stderr.decode()}")
+    if command.startswith("cd "):
+        os.chdir(command[3:])
     else:
-        print(stdout.decode())
+        process = subprocess.Popen(
+            command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
+        stdout, stderr = process.communicate()
+
+        if process.returncode != 0:
+            print(f"Error occurred: {stderr.decode()}")
+        else:
+            print(stdout.decode())
 
 
 while True:
